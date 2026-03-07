@@ -1,8 +1,9 @@
-rem 关闭Windows外壳程序explorer
+@echo off
+rem Close Windows Explorer shell
 
 taskkill /f /im explorer.exe
 
-rem 清理系统图标缓存数据库
+rem Clear system icon cache database
 
 attrib -h -s -r "%userprofile%\AppData\Local\IconCache.db"
 
@@ -18,11 +19,11 @@ del /f "%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_1024.d
 del /f "%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_idx.db"
 del /f "%userprofile%\AppData\Local\Microsoft\Windows\Explorer\thumbcache_sr.db"
 
-rem 清理 系统托盘记忆的图标
+rem Clear system tray icon cache
 
 echo y|reg delete "HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify" /v IconStreams
 echo y|reg delete "HKEY_CLASSES_ROOT\Local Settings\Software\Microsoft\Windows\CurrentVersion\TrayNotify" /v PastIconsStream
 
-rem 重启Windows外壳程序explorer
+rem Restart Windows Explorer shell
 
 start explorer
