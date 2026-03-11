@@ -240,20 +240,28 @@ select_version() {
 
     echo ""
     echo "请选择 Node.js 版本:"
-    echo "  1) Node.js 20 (LTS - 推荐)"
-    echo "  2) Node.js 18 (LTS)"
-    echo "  3) Node.js 16 (LTS)"
-    echo "  4) 指定版本"
+    echo "  1) Node.js 24 (LTS - Current 推荐)"
+    echo "  2) Node.js 22 (LTS)"
+    echo "  3) Node.js 20 (LTS - Maintenance)"
+    echo "  4) Node.js 18 (LTS - 维护结束)"
+    echo "  5) Node.js 16 (LTS - 维护结束)"
+    echo "  6) Node.js 14 (LTS - 维护结束)"
+    echo "  7) Node.js 12 (LTS - 维护结束)"
+    echo "  8) 指定版本"
     echo ""
-    read -p "请输入选项 [1-4] (默认: 1): " version_choice
+    read -p "请输入选项 [1-8] (默认: 1): " version_choice
     version_choice=${version_choice:-1}
 
     case $version_choice in
-        1) NODE_VERSION="20" ;;
-        2) NODE_VERSION="18" ;;
-        3) NODE_VERSION="16" ;;
-        4)
-            read -p "请输入版本号 (如: 20): " NODE_VERSION
+        1) NODE_VERSION="24" ;;
+        2) NODE_VERSION="22" ;;
+        3) NODE_VERSION="20" ;;
+        4) NODE_VERSION="18" ;;
+        5) NODE_VERSION="16" ;;
+        6) NODE_VERSION="14" ;;
+        7) NODE_VERSION="12" ;;
+        8)
+            read -p "请输入版本号 (如: 24): " NODE_VERSION
             ;;
         *)
             error "无效选项"
