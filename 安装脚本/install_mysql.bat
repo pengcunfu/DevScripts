@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem MySQL Installer
+rem ----------------------------------------------------------------------------
+rem Install MySQL 8.0 or 8.4 on Windows via winget.
+rem
+rem Features:
+rem   - MySQL 8.0 (recommended) or 8.4
+rem   - Open official download page
+rem   - Post-install setup hints
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 chcp 65001 >nul
 title MySQL Installer
 

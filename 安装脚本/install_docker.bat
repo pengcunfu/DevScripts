@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Docker Desktop Installer
+rem ----------------------------------------------------------------------------
+rem Install Docker Desktop on Windows via winget.
+rem
+rem Features:
+rem   - Detect existing Docker installation
+rem   - Optional reinstall
+rem   - winget automated install
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 title Docker Desktop Installer

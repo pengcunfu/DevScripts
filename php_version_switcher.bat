@@ -1,4 +1,17 @@
 @echo off
+rem ============================================================================
+rem PHP Version Switcher
+rem ----------------------------------------------------------------------------
+rem Switch active PHP by updating system PATH (multiple side-by-side installs).
+rem
+rem Features:
+rem   - Detect current PHP version
+rem   - Switch among PHP 7.4, 8.0, 8.1, 8.2, 8.3 (edit base path in script)
+rem   - Persist PATH via setx /M
+rem   - Auto-elevate if not admin
+rem
+rem Usage: Run as Administrator. Edit phpBasePath before use.
+rem ============================================================================
 rem Check for administrator privileges
 (pushd "%~dp0") && (reg query "HKU\S-1-5-19" > nul 2>&1) || (powershell -command "& { Start-Process '%~sdpnx0' -Verb RunAs }" && exit)
 setlocal enabledelayedexpansion

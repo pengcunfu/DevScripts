@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem PostgreSQL Installer
+rem ----------------------------------------------------------------------------
+rem Install PostgreSQL 16 or 17 on Windows via winget.
+rem
+rem Features:
+rem   - PostgreSQL 16 (LTS) or 17 (latest)
+rem   - Default port and data directory hints
+rem
+rem Usage: Run as Administrator. Set postgres password during setup.
+rem ============================================================================
 chcp 65001 >nul
 title PostgreSQL Installer
 

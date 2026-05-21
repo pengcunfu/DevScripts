@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Icon Cache Refresher
+rem ----------------------------------------------------------------------------
+rem Clear Windows icon and thumbnail caches when icons look wrong or stale.
+rem
+rem Features:
+rem   - Delete IconCache.db and Explorer thumbcache files
+rem   - Reset system tray icon streams
+rem   - Restart Explorer automatically
+rem
+rem Usage: Double-click to run (no admin required).
+rem ============================================================================
 rem Close Windows Explorer shell
 
 taskkill /f /im explorer.exe

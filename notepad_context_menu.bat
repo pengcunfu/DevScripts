@@ -1,5 +1,18 @@
-@ECHO OFF&(PUSHD "%~DP0")&(REG QUERY "HKU\S-1-5-19">NUL 2>&1)||(
-powershell -Command "Start-Process '%~sdpnx0' -Verb RunAs"&&EXIT)
+@ECHO OFF
+rem ============================================================================
+rem Notepad++ Context Menu Manager
+rem ----------------------------------------------------------------------------
+rem Add or remove "Open with Notepad++" on file right-click menus.
+rem
+rem Features:
+rem   - Add Notepad++ to * (all files) context menu
+rem   - Remove Notepad++ context menu entry
+rem   - Auto-elevate if not admin
+rem
+rem Usage: Run as Administrator. Place notepad++.exe next to this script.
+rem ============================================================================
+(PUSHD "%~DP0") && (REG QUERY "HKU\S-1-5-19">NUL 2>&1) || (
+powershell -Command "Start-Process '%~sdpnx0' -Verb RunAs" && EXIT)
 
 VER|FINDSTR "5\.[0-9]\.[0-9][0-9]*" > NUL && (
 ECHO.&ECHO Windows XP not supported &PAUSE>NUL&EXIT)

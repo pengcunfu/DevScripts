@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Redis Installer
+rem ----------------------------------------------------------------------------
+rem Install Redis on Windows via Memurai, WSL, or legacy Windows port.
+rem
+rem Features:
+rem   - Memurai (Redis-compatible, recommended)
+rem   - WSL native Redis instructions
+rem   - Download legacy Redis zip and register Windows service
+rem
+rem Usage: Run as Administrator (for service install option).
+rem ============================================================================
 chcp 65001 >nul
 title Redis Installer
 

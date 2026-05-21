@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Python Version Manager (pyenv-win)
+rem ----------------------------------------------------------------------------
+rem Install pyenv-win or open official Python downloads.
+rem
+rem Features:
+rem   - Clone and configure pyenv-win
+rem   - Set PYENV and PATH environment variables
+rem   - Link to official Python installer
+rem
+rem Usage: Run as Administrator (for setx /M).
+rem ============================================================================
 chcp 65001 >nul
 title Python Version Manager
 

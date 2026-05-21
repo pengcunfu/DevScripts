@@ -1,4 +1,17 @@
 @echo off
+rem ============================================================================
+rem JDK Version Switcher
+rem ----------------------------------------------------------------------------
+rem Switch active JDK by updating system PATH (multiple side-by-side installs).
+rem
+rem Features:
+rem   - Detect current Java version
+rem   - Switch among JDK 8, 11, 17 (edit base path in script)
+rem   - Persist PATH via setx /M
+rem   - Auto-elevate if not admin
+rem
+rem Usage: Run as Administrator. Edit jdkBasePath before use.
+rem ============================================================================
 rem Check for administrator privileges
 (pushd "%~dp0") && (reg query "HKU\S-1-5-19" > nul 2>&1) || (powershell -command "& { Start-Process '%~sdpnx0' -Verb RunAs }" && exit)
 setlocal enabledelayedexpansion

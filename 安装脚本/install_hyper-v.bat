@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Hyper-V Enabler
+rem ----------------------------------------------------------------------------
+rem Enable Hyper-V on Windows Pro/Enterprise.
+rem
+rem Features:
+rem   - Add Hyper-V packages via DISM
+rem   - Enable Microsoft-Hyper-V-All feature
+rem   - Optional scheduled restart
+rem
+rem Usage: Run as Administrator. Requires Pro/Enterprise edition.
+rem ============================================================================
 chcp 65001 >nul
 title Hyper-V Installer
 

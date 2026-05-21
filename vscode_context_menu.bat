@@ -1,5 +1,18 @@
-@ECHO OFF&(PUSHD "%~DP0")&(REG QUERY "HKU\S-1-5-19">NUL 2>&1)||(
-powershell -Command "Start-Process '%~sdpnx0' -Verb RunAs"&&EXIT)
+@ECHO OFF
+rem ============================================================================
+rem VSCode Context Menu Manager
+rem ----------------------------------------------------------------------------
+rem Add or remove "Open with Code" on folder right-click menus.
+rem
+rem Features:
+rem   - Add VSCode to Directory and Background context menus
+rem   - Remove VSCode context menu entries
+rem   - Auto-elevate if not admin
+rem
+rem Usage: Run as Administrator. Edit menuPath to your Code.exe path.
+rem ============================================================================
+(PUSHD "%~DP0") && (REG QUERY "HKU\S-1-5-19">NUL 2>&1) || (
+powershell -Command "Start-Process '%~sdpnx0' -Verb RunAs" && EXIT)
 
 REM This helper script checks for admin rights and re-runs with elevation if needed
 

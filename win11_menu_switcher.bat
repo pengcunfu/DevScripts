@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem Win11 Menu Switcher
+rem ----------------------------------------------------------------------------
+rem Switch between Windows 11 compact context menu and Windows 10 classic menu.
+rem
+rem Features:
+rem   - Restore Win11 default right-click menu
+rem   - Switch to Win10-style full context menu
+rem
+rem Usage: Double-click to run (no admin required). Restarts Explorer.
+rem ============================================================================
 setlocal EnableDelayedExpansion
 title Win11 Menu Switcher
 

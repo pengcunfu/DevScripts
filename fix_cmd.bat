@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem CMD Startup Fix (Quick)
+rem ----------------------------------------------------------------------------
+rem Fix CMD that fails to open due to a bad AutoRun registry entry.
+rem
+rem Features:
+rem   - Remove HKCU Command Processor AutoRun value
+rem   - Quick one-step repair
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 echo Fixing CMD startup errors...
 
 :: Check for administrator privileges

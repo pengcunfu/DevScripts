@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Git Installer
+rem ----------------------------------------------------------------------------
+rem Install Git for Windows via winget.
+rem
+rem Features:
+rem   - Detect existing Git installation
+rem   - Optional reinstall
+rem   - Post-install config hints (user.name / user.email)
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 title Git Installer

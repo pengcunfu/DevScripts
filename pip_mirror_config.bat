@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem PIP Mirror Configuration Tool
+rem ----------------------------------------------------------------------------
+rem Set Python pip index URL to a domestic or official mirror.
+rem
+rem Features:
+rem   - Douban, Tsinghua, Aliyun, Huawei, and official PyPI
+rem   - Configure trusted-host where needed
+rem
+rem Usage: Double-click to run (requires Python installed).
+rem ============================================================================
 chcp 65001 >nul
 title PIP Mirror Configuration
 

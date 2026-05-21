@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem MariaDB Installer
+rem ----------------------------------------------------------------------------
+rem Open the official MariaDB download page (manual MSI install).
+rem
+rem Features:
+rem   - Launch mariadb.com downloads
+rem   - Version and root password setup hints
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 chcp 65001 >nul
 title MariaDB Installer
 

@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Docker Compose Installer
+rem ----------------------------------------------------------------------------
+rem Install standalone docker-compose CLI (separate from Docker Desktop).
+rem
+rem Features:
+rem   - Detect existing docker-compose
+rem   - Skip if Docker Desktop already includes Compose
+rem   - Download latest release from GitHub to System32
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 title Docker Compose Installer

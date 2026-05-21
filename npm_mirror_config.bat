@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem NPM Mirror Configuration Tool
+rem ----------------------------------------------------------------------------
+rem Switch npm registry between China mirrors and the official source.
+rem
+rem Features:
+rem   - Taobao, Tencent, Huawei mirrors and official registry
+rem   - View current registry URL
+rem   - Basic mirror speed test
+rem
+rem Usage: Double-click to run (requires Node.js/npm installed).
+rem ============================================================================
 title NPM Mirror Configuration Tool
 
 :MENU

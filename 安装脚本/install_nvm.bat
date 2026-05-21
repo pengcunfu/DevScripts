@@ -1,4 +1,17 @@
 @echo off
+rem ============================================================================
+rem Node.js PATH Switcher (Multi-Version)
+rem ----------------------------------------------------------------------------
+rem Switch active Node.js by updating system PATH (side-by-side installs).
+rem
+rem Features:
+rem   - Pick among versions 12 / 16 / 18 / 20 / 22
+rem   - Detect current version and skip if unchanged
+rem   - Persist PATH via setx /M
+rem   - Auto-elevate if not admin
+rem
+rem Usage: Run as Administrator. Edit basePath before use.
+rem ============================================================================
 chcp 65001 >nul
 rem Check administrator privileges
 (pushd "%~dp0") && (reg query "HKU\S-1-5-19" > nul 2>&1) || (powershell -command "& { Start-Process '%~sdpnx0' -Verb RunAs }" && exit)

@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Win11 Context Menu Switcher
+rem ----------------------------------------------------------------------------
+rem Toggle the modern Win11 right-click menu (Show more options) on or off.
+rem
+rem Features:
+rem   - Disable modern menu (Win10-style, fewer clicks)
+rem   - Restore Win11 default menu
+rem   - Auto-check admin rights and Windows version
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 :: Win11 Right-Click Menu Switcher
 :: Supports automatic admin permission detection and Windows 11 version verification
 

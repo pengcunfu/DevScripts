@@ -1,3 +1,18 @@
+# ============================================================================
+# CMD Repair Tool (Full)
+# ----------------------------------------------------------------------------
+# Deep repair when CMD is broken, missing, or not on PATH.
+#
+# Features:
+#   - Restore cmd.exe registry App Paths
+#   - Restore missing cmd.exe from WinSxS backup
+#   - Fix system PATH if System32 is missing
+#   - Reset cmd.exe ACLs
+#   - Run sfc /scannow and DISM RestoreHealth
+#
+# Usage: Run PowerShell as Administrator.
+# ============================================================================
+
 # Run PowerShell as Administrator
 if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Host "Please run this script as Administrator!" -ForegroundColor Red

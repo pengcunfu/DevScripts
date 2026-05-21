@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Node.js Installer
+rem ----------------------------------------------------------------------------
+rem Install Node.js LTS, Current, or nvm-windows via winget.
+rem
+rem Features:
+rem   - Node.js LTS or Current
+rem   - nvm-windows version manager
+rem   - Detect existing installation
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 title Node.js Installer

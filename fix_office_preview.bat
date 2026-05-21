@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem Office File Preview Fix
+rem ----------------------------------------------------------------------------
+rem Restore Explorer preview pane for Word, Excel, and PowerPoint files.
+rem
+rem Features:
+rem   - Fix preview handlers for .doc/.docx, .xls/.xlsx, .ppt/.pptx
+rem   - Optional Explorer restart after repair
+rem
+rem Usage: Double-click to run (registry changes; admin may be required).
+rem ============================================================================
 title Office Preview Fix Tool
 
 echo ==========================================

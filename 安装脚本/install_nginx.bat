@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem Nginx Installer
+rem ----------------------------------------------------------------------------
+rem Install Nginx on Windows or guide WSL-based setup.
+rem
+rem Features:
+rem   - Download official Windows zip to C:\nginx
+rem   - WSL install instructions
+rem   - Open official documentation
+rem
+rem Usage: Run as Administrator (for extract to C:\).
+rem ============================================================================
 chcp 65001 >nul
 title Nginx Installer
 

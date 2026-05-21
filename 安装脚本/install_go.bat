@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem Go Installer
+rem ----------------------------------------------------------------------------
+rem Install Go programming language via winget.
+rem
+rem Features:
+rem   - Detect existing Go installation
+rem   - Optional reinstall
+rem
+rem Usage: Run as Administrator. Open new terminal after install.
+rem ============================================================================
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 title Go Installer

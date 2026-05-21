@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem ROS 2 Installer Guide
+rem ----------------------------------------------------------------------------
+rem Guide ROS 2 installation on Windows (WSL recommended).
+rem
+rem Features:
+rem   - WSL 2 install steps and Linux script reference
+rem   - Native Windows binary download links
+rem   - Open official ROS 2 documentation
+rem
+rem Usage: Run as Administrator. Mostly opens docs and prints steps.
+rem ============================================================================
 chcp 65001 >nul
 title ROS 2 Installer
 

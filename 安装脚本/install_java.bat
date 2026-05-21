@@ -1,4 +1,15 @@
 @echo off
+rem ============================================================================
+rem JDK Installer
+rem ----------------------------------------------------------------------------
+rem Install Oracle JDK or OpenJDK via winget.
+rem
+rem Features:
+rem   - Oracle JDK 17 / 21
+rem   - OpenJDK 17 / 21
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 chcp 65001 >nul
 title JDK Installer
 

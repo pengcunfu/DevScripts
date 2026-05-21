@@ -1,4 +1,17 @@
 @echo off
+rem ============================================================================
+rem CMD Context Menu Manager
+rem ----------------------------------------------------------------------------
+rem Add or remove "Open CMD here" entries on folder/drive right-click menus.
+rem
+rem Features:
+rem   - Add normal CMD here (folder, background, drive)
+rem   - Add elevated CMD Admin here
+rem   - Remove CMD or CMD Admin entries
+rem   - Auto-elevate if not admin
+rem
+rem Usage: Run as Administrator (auto re-launches elevated).
+rem ============================================================================
 setlocal EnableDelayedExpansion
 
 net session >nul 2>&1

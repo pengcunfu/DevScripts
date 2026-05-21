@@ -1,4 +1,16 @@
 @echo off
+rem ============================================================================
+rem PHP Installer
+rem ----------------------------------------------------------------------------
+rem Download and extract official PHP builds for Windows.
+rem
+rem Features:
+rem   - Install PHP 8.1 / 8.2 / 8.3 to C:\php
+rem   - Create php.ini from development template
+rem   - Open official download page
+rem
+rem Usage: Run as Administrator.
+rem ============================================================================
 chcp 65001 >nul
 title PHP Installer
 
