@@ -55,7 +55,7 @@ if "%choice%"=="1" (
     )
 ) else if "%choice%"=="2" (
     echo.
-    echo [提示] 请先安装 WSL，然后运行 Linux 安装脚本
+    echo [提示] 请先安装 WSL，然后运行 Linux/安装脚本/install_nginx.sh
     echo.
     echo 安装 WSL 命令: wsl --install
 ) else if "%choice%"=="3" (

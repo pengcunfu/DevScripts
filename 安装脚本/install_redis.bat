@@ -31,7 +31,7 @@ if "%choice%"=="1" (
     start https://www.memurai.com/get-memurai
 ) else if "%choice%"=="2" (
     echo.
-    echo [提示] 请先安装 WSL，然后运行 Linux Redis 安装脚本
+    echo [提示] 请先安装 WSL，然后运行 Linux/安装脚本/install_redis.sh
     echo.
     echo 安装 WSL 命令: wsl --install
 ) else if "%choice%"=="3" (

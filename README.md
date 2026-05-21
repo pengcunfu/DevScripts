@@ -29,21 +29,23 @@
 ```
 DevScripts/
 ├── Linux/                    # Linux 脚本
-│   └── open_port.sh         # 开放端口工具
-├── Windows/                  # Windows 工具脚本
-│   ├── Win11菜单切换.bat     # Win11 菜单样式切换
-│   ├── Win11桌面右键.bat     # Win11 右键菜单修复
-│   ├── npm镜像配置.bat       # npm 镜像配置
-│   ├── pip镜像配置.bat       # pip 镜像配置
-│   ├── fix_cmd.ps1          # CMD 修复工具
-│   └── ...                  # 更多工具
-├── 安装脚本/                 # 跨平台安装脚本
-│   ├── install_docker.sh/bat     # Docker 安装
-│   ├── install_git.sh/bat        # Git 安装
-│   ├── install_nodejs.sh/bat     # Node.js 安装
-│   └── ...                     # 更多安装脚本
-└── Reg/                      # 注册表脚本
-    └── Office预览注册表修复.bat  # Office 预览修复
+│   ├── 安装脚本/             # 环境安装（.sh）
+│   │   ├── install_docker.sh
+│   │   ├── install_git.sh
+│   │   └── ...
+│   ├── 部署脚本/             # 远程部署（.py）
+│   ├── mirror_config.sh      # 镜像源配置
+│   └── open_port.sh          # 开放防火墙端口
+└── Windows/                  # Windows 脚本
+    ├── 安装脚本/             # 环境安装（.bat）
+    │   ├── install_docker.bat
+    │   ├── install_git.bat
+    │   └── ...
+    ├── 部署脚本/             # 远程部署（.py）
+    ├── npm_mirror_config.bat # npm 镜像配置
+    ├── pip_mirror_config.bat # pip 镜像配置
+    ├── fix_cmd.ps1           # CMD 修复工具
+    └── ...                   # 更多系统工具
 ```
 
 ---
@@ -69,10 +71,10 @@ git clone https://github.com/yourusername/DevScripts.git
 cd DevScripts
 
 # 添加执行权限
-chmod +x Linux/*.sh 安装脚本/*.sh
+chmod +x Linux/*.sh Linux/安装脚本/*.sh
 
 # 运行脚本
-sudo ./安装脚本/install_docker.sh
+sudo ./Linux/安装脚本/install_docker.sh
 ```
 
 ---
@@ -137,14 +139,14 @@ sudo ./安装脚本/install_docker.sh
 
 ```batch
 # 以管理员身份运行
-cd 安装脚本
+cd Windows\安装脚本
 install_docker.bat
 ```
 
 ### 安装 Docker（Linux）
 
 ```bash
-sudo ./安装脚本/install_docker.sh
+sudo ./Linux/安装脚本/install_docker.sh
 ```
 
 ### 切换 npm 镜像源

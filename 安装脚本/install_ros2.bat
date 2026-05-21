@@ -30,7 +30,7 @@ if "%choice%"=="1" (
     echo [步骤 1] 安装 WSL 2
     echo 请运行: wsl --install
     echo.
-    echo [步骤 2] 安装 Ubuntu 后，运行 ROS 2 Linux 安装脚本
+    echo [步骤 2] 安装 Ubuntu 后，运行 Linux/安装脚本/install_ros2.sh
     echo.
     echo [步骤 3] 启用 X11 转发（可选，用于 GUI）
     echo   下载 VcXsrv 或使用 WSLg
