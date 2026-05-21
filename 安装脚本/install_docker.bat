@@ -1,49 +1,50 @@
 @echo off
+setlocal enabledelayedexpansion
 chcp 65001 >nul
-title Docker Desktop 安装工具
+title Docker Desktop Installer
 
-echo ════════════════════════════════════════
-echo       Docker Desktop 安装工具
-echo ════════════════════════════════════════
+echo ========================================
+echo       Docker Desktop Installer
+echo ========================================
 echo.
 
-:: 检查管理员权限
+:: Check administrator privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 此脚本需要管理员权限运行
-    echo 请右键点击脚本，选择"以管理员身份运行"
+    echo [ERROR] This script requires administrator privileges.
+    echo Right-click the script and select "Run as administrator".
     pause
     exit /b 1
 )
 
-:: 检查是否已安装
+:: Check if already installed
 where docker >nul 2>&1
 if %errorlevel% equ 0 (
-    echo [信息] 检测到已安装 Docker
+    echo [INFO] Docker is already installed
     docker --version
     echo.
-    set /p reinstall=是否重新安装？(Y/N):
+    set /p reinstall=Reinstall? (Y/N):
     if /i not "!reinstall!"=="Y" exit /b 0
 )
 
-echo [信息] 正在安装 Docker Desktop...
+echo [INFO] Installing Docker Desktop...
 echo.
 
-:: 使用 winget 安装
+:: Install via winget
 winget install Docker.DockerDesktop --accept-package-agreements --accept-source-agreements
 
 if %errorlevel% equ 0 (
     echo.
-    echo ════════════════════════════════════════
-    echo [成功] Docker Desktop 安装完成！
-    echo ════════════════════════════════════════
+    echo ========================================
+    echo [SUCCESS] Docker Desktop installed successfully!
+    echo ========================================
     echo.
-    echo 请注销并重新登录，或重启计算机以完成安装
-    echo 启动后请在 WSL 2 或 Hyper-V 模式下运行 Docker
+    echo Sign out and sign back in, or restart your computer to finish setup.
+    echo After startup, run Docker in WSL 2 or Hyper-V mode.
 ) else (
     echo.
-    echo [错误] 安装失败，请手动下载安装
-    echo 下载地址: https://www.docker.com/products/docker-desktop
+    echo [ERROR] Installation failed. Please install manually.
+    echo Download: https://www.docker.com/products/docker-desktop
 )
 
 pause

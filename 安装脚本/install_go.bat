@@ -1,49 +1,50 @@
 @echo off
+setlocal enabledelayedexpansion
 chcp 65001 >nul
-title Go 语言安装工具
+title Go Installer
 
-echo ════════════════════════════════════════
-echo       Go 语言安装工具
-echo ════════════════════════════════════════
+echo ========================================
+echo       Go Installer
+echo ========================================
 echo.
 
-:: 检查管理员权限
+:: Check administrator privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 此脚本需要管理员权限运行
+    echo [ERROR] This script requires administrator privileges.
     pause
     exit /b 1
 )
 
-:: 检查是否已安装
+:: Check if already installed
 where go >nul 2>&1
 if %errorlevel% equ 0 (
-    echo [信息] 检测到已安装 Go
+    echo [INFO] Go is already installed
     go version
     echo.
-    set /p reinstall=是否重新安装？(Y/N):
+    set /p reinstall=Reinstall? (Y/N):
     if /i not "!reinstall!"=="Y" exit /b 0
 )
 
-echo [信息] 正在安装 Go 语言...
+echo [INFO] Installing Go...
 echo.
 
-:: 使用 winget 安装
+:: Install via winget
 winget install GoLang.Go --accept-package-agreements --accept-source-agreements
 
 if %errorlevel% equ 0 (
     echo.
-    echo ════════════════════════════════════════
-    echo [成功] Go 语言安装完成！
-    echo ════════════════════════════════════════
+    echo ========================================
+    echo [SUCCESS] Go installed successfully!
+    echo ========================================
     echo.
     go version
     echo.
-    echo [提示] 请重新打开命令提示符以使用 Go
-    echo        或运行: refreshenv
+    echo [TIP] Open a new Command Prompt to use Go
+    echo        or run: refreshenv
 ) else (
-    echo [错误] 安装失败，请手动下载安装
-    echo 下载地址: https://golang.org/dl/
+    echo [ERROR] Installation failed. Please install manually.
+    echo Download: https://golang.org/dl/
 )
 
 pause

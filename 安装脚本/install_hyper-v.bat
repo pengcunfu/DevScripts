@@ -1,41 +1,41 @@
 @echo off
 chcp 65001 >nul
-title Hyper-V 安装工具
+title Hyper-V Installer
 
-echo ════════════════════════════════════════
-echo        Hyper-V 安装工具
-echo ════════════════════════════════════════
+echo ========================================
+echo        Hyper-V Installer
+echo ========================================
 echo.
-echo 此脚本将启用 Windows Hyper-V 功能
-echo 仅支持 Windows Pro/Enterprise 版本
+echo This script enables the Windows Hyper-V feature.
+echo Supported on Windows Pro/Enterprise only.
 echo.
 pause
 
 echo.
-echo 正在启用 Hyper-V...
+echo Enabling Hyper-V...
 echo.
 
-:: 添加所有 Hyper-V 相关包
+:: Add all Hyper-V related packages
 for /f %%i in ('dir /b %SystemRoot%\servicing\Packages\*Hyper-V*.mum 2^>nul') do (
     dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i" >nul 2>&1
 )
 
-:: 启用 Hyper-V 功能
+:: Enable Hyper-V feature
 dism /online /enable-feature /featurename:Microsoft-Hyper-V-All /LimitAccess /ALL /NoRestart
 
 echo.
-echo ════════════════════════════════════════
-echo Hyper-V 安装完成！
-echo ════════════════════════════════════════
+echo ========================================
+echo Hyper-V enabled successfully!
+echo ========================================
 echo.
-echo 请重启计算机以完成安装
+echo Restart your computer to complete installation.
 echo.
-set /p restart=是否立即重启？(Y/N):
+set /p restart=Restart now? (Y/N):
 if /i "%restart%"=="Y" (
-    shutdown /r /t 10 /c "Hyper-V 安装完成，重启中..."
-    echo 10秒后重启...
+    shutdown /r /t 10 /c "Hyper-V setup complete. Restarting..."
+    echo Restarting in 10 seconds...
 ) else (
-    echo 请稍后手动重启计算机
+    echo Please restart your computer manually later.
 )
 
 pause

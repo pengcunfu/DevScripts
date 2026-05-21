@@ -1,57 +1,57 @@
 @echo off
 chcp 65001 >nul
-title Python 版本管理工具
+title Python Version Manager
 
-echo ════════════════════════════════════════
-echo    Python 版本管理工具
-echo ════════════════════════════════════════
+echo ========================================
+echo    Python Version Manager
+echo ========================================
 echo.
 
-:: 检查管理员权限
+:: Check administrator privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 此脚本需要管理员权限运行
+    echo [ERROR] This script requires administrator privileges.
     pause
     exit /b 1
 )
 
-echo 请选择要安装的 Python 管理工具：
+echo Select a Python management tool:
 echo.
-echo [1] pyenv-win (推荐，类似 Linux pyenv)
-echo [2] 下载官方 Python (单一版本)
+echo [1] pyenv-win (recommended, similar to Linux pyenv)
+echo [2] Download official Python (single version)
 echo.
-set /p choice=请选择:
+set /p choice=Select option:
 
 if "%choice%"=="1" (
     echo.
-    echo [信息] 正在安装 pyenv-win...
+    echo [INFO] Installing pyenv-win...
     echo.
 
-    :: 使用 Git 克隆 pyenv-win
+    :: Clone pyenv-win with Git
     if not exist "%USERPROFILE%\.pyenv" (
         git clone https://github.com/pyenv-win/pyenv-win.git "%USERPROFILE%\.pyenv-win"
     )
 
-    :: 设置环境变量
+    :: Set environment variables
     setx PYENV "%USERPROFILE%\.pyenv-win\pyenv-win" /M
     setx PATH "%PATH%;%USERPROFILE%\.pyenv-win\pyenv-win\bin;%USERPROFILE%\.pyenv-win\pyenv-win\shims" /M
 
     echo.
-    echo ════════════════════════════════════════
-    echo [成功] pyenv-win 安装完成！
-    echo ════════════════════════════════════════
+    echo ========================================
+    echo [SUCCESS] pyenv-win installed successfully!
+    echo ========================================
     echo.
-    echo 请重新打开命令提示符后使用：
-    echo   pyenv install --list    查看可用版本
-    echo   pyenv install 3.12      安装 Python 3.12
-    echo   pyenv global 3.12       设置全局版本
-    echo   pyenv versions          查看已安装版本
+    echo Open a new Command Prompt, then use:
+    echo   pyenv install --list    List available versions
+    echo   pyenv install 3.12      Install Python 3.12
+    echo   pyenv global 3.12       Set global version
+    echo   pyenv versions          List installed versions
 ) else if "%choice%"=="2" (
     echo.
-    echo [信息] 打开 Python 官网下载页面...
+    echo [INFO] Opening Python download page...
     start https://www.python.org/downloads/windows/
 ) else (
-    echo [错误] 无效的选择
+    echo [ERROR] Invalid selection
     pause
     exit /b 1
 )

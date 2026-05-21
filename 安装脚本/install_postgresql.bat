@@ -1,56 +1,56 @@
 @echo off
 chcp 65001 >nul
-title PostgreSQL 安装工具
+title PostgreSQL Installer
 
-echo ════════════════════════════════════════
-echo    PostgreSQL 安装工具
-echo ════════════════════════════════════════
+echo ========================================
+echo    PostgreSQL Installer
+echo ========================================
 echo.
 
-:: 检查管理员权限
+:: Check administrator privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 此脚本需要管理员权限运行
+    echo [ERROR] This script requires administrator privileges.
     pause
     exit /b 1
 )
 
-echo 请选择要安装的 PostgreSQL 版本：
+echo Select PostgreSQL version to install:
 echo.
 echo [1] PostgreSQL 16 (LTS)
-echo [2] PostgreSQL 17 (最新)
+echo [2] PostgreSQL 17 (latest)
 echo.
-set /p choice=请选择版本:
+set /p choice=Select version:
 
 if "%choice%"=="1" (
     echo.
-    echo [信息] 正在安装 PostgreSQL 16...
+    echo [INFO] Installing PostgreSQL 16...
     winget install PostgreSQL.PostgreSQL.16 --accept-package-agreements --accept-source-agreements
 ) else if "%choice%"=="2" (
     echo.
-    echo [信息] 正在安装 PostgreSQL 17...
+    echo [INFO] Installing PostgreSQL 17...
     winget install PostgreSQL.PostgreSQL.17 --accept-package-agreements --accept-source-agreements
 ) else (
-    echo [错误] 无效的选择
+    echo [ERROR] Invalid selection
     pause
     exit /b 1
 )
 
 if %errorlevel% equ 0 (
     echo.
-    echo ════════════════════════════════════════
-    echo [成功] PostgreSQL 安装完成！
-    echo ════════════════════════════════════════
+    echo ========================================
+    echo [SUCCESS] PostgreSQL installed successfully!
+    echo ========================================
     echo.
-    echo [提示] 默认配置：
-    echo   端口: 5432
-    echo   用户: postgres
-    echo   数据目录: C:\Program Files\PostgreSQL\[版本]\data
+    echo [TIP] Default configuration:
+    echo   Port:     5432
+    echo   User:     postgres
+    echo   Data dir: C:\Program Files\PostgreSQL\[version]\data
     echo.
-    echo 请在安装过程中设置 postgres 用户密码
+    echo Set the postgres user password during installation.
 ) else (
-    echo [错误] 安装失败，请手动下载安装
-    echo 下载地址: https://www.postgresql.org/download/windows/
+    echo [ERROR] Installation failed. Please install manually.
+    echo Download: https://www.postgresql.org/download/windows/
 )
 
 pause

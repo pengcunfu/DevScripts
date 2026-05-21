@@ -1,34 +1,34 @@
 @echo off
 chcp 65001 >nul
-title MariaDB 安装工具
+title MariaDB Installer
 
-echo ════════════════════════════════════════
-echo      MariaDB 安装工具
-echo ════════════════════════════════════════
+echo ========================================
+echo      MariaDB Installer
+echo ========================================
 echo.
 
-:: 检查管理员权限
+:: Check administrator privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 此脚本需要管理员权限运行
+    echo [ERROR] This script requires administrator privileges.
     pause
     exit /b 1
 )
 
-echo [警告] MariaDB Windows 版本需要手动下载安装
+echo [WARNING] MariaDB for Windows must be installed manually.
 echo.
-echo 此脚本将打开 MariaDB 官方下载页面
-echo 请选择适合您系统的版本（MSI 安装包）
+echo This script will open the official MariaDB download page.
+echo Select the MSI installer for your system.
 echo.
-echo 推荐版本：MariaDB 10.x 或 11.x
+echo Recommended: MariaDB 10.x or 11.x
 echo.
 pause
 
 start https://mariadb.com/downloads/
 
 echo.
-echo [提示] 下载完成后，请运行安装程序
-echo        安装时请设置 root 密码
+echo [TIP] After downloading, run the installer
+echo        and set the root password during setup.
 echo.
 
 pause

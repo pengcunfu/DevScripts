@@ -1,73 +1,73 @@
 @echo off
 chcp 65001 >nul
-title Redis 安装工具
+title Redis Installer
 
-echo ════════════════════════════════════════
-echo       Redis 安装工具
-echo ════════════════════════════════════════
+echo ========================================
+echo       Redis Installer
+echo ========================================
 echo.
 
-:: 检查管理员权限
+:: Check administrator privileges
 net session >nul 2>&1
 if %errorlevel% neq 0 (
-    echo [错误] 此脚本需要管理员权限运行
+    echo [ERROR] This script requires administrator privileges.
     pause
     exit /b 1
 )
 
-echo [提示] Redis 在 Windows 上的安装方式
+echo [INFO] Redis installation options on Windows
 echo.
-echo [1] 下载 Memurai (Redis 兼容，推荐)
-echo [2] 使用 WSL 运行原生 Redis
-echo [3] 下载 Redis Windows 移植版
+echo [1] Download Memurai (Redis-compatible, recommended)
+echo [2] Run native Redis via WSL
+echo [3] Download Redis Windows port
 echo.
-set /p choice=请选择安装方式:
+set /p choice=Select installation method:
 
 if "%choice%"=="1" (
     echo.
-    echo [信息] 打开 Memurai 官网...
-    echo Memurai 是 Redis 的 Windows 兼容版本
-    echo 由 Redis 原开发者维护
+    echo [INFO] Opening Memurai website...
+    echo Memurai is a Redis-compatible build for Windows
+    echo maintained by the original Redis developers
     start https://www.memurai.com/get-memurai
 ) else if "%choice%"=="2" (
     echo.
-    echo [提示] 请先安装 WSL，然后运行 Linux/安装脚本/install_redis.sh
+    echo [INFO] Install WSL first, then run install_redis.sh from the Linux install-scripts folder
     echo.
-    echo 安装 WSL 命令: wsl --install
+    echo Install WSL: wsl --install
 ) else if "%choice%"=="3" (
     echo.
-    echo [信息] 下载 Redis Windows 版本...
+    echo [INFO] Downloading Redis for Windows...
     echo.
-    echo [警告] 这是非官方移植版，建议用于开发环境
+    echo [WARNING] This is an unofficial port. Recommended for development only.
     echo.
     pause
 
-    :: 下载 Redis
+    :: Download Redis
     powershell -Command "Invoke-WebRequest -Uri 'https://github.com/microsoftarchive/redis/releases/download/win-3.2.100/Redis-x64-3.2.100.zip' -OutFile '$env:TEMP\redis.zip'"
 
     if exist %TEMP%\redis.zip (
-        :: 创建安装目录
+        :: Create install directory
         if not exist "C:\redis" mkdir "C:\redis"
 
-        :: 解压 Redis
+        :: Extract Redis
         powershell -Command "Expand-Archive -Path '%TEMP%\redis.zip' -DestinationPath 'C:\redis' -Force"
 
-        :: 注册为服务
+        :: Register as Windows service
         "C:\redis\redis-server.exe" --service-install
 
         echo.
-        echo ════════════════════════════════════════
-        echo [成功] Redis 安装完成！
-        echo ════════════════════════════════════════
+        echo ========================================
+        echo [SUCCESS] Redis installed successfully!
+        echo ========================================
         echo.
-        echo 安装目录: C:\redis
+        echo Install directory: C:\redis
         echo.
-        echo 使用方法：
-        echo   启动服务: net start Redis
-        echo   停止服务: net stop Redis
-        echo   命令行: C:\redis\redis-cli.exe
+        echo Usage:
+        echo   Start service: net start Redis
+        echo   Stop service:  net stop Redis
+        echo   CLI:           C:\redis\redis-cli.exe
     ) else (
-        echo [错误] 下载失败
+        echo [ERROR] Download failed
     )
 )
 
