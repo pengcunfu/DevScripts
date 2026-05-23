@@ -67,7 +67,7 @@ if "%choice%"=="1" (
     )
 ) else if "%choice%"=="2" (
     echo.
-    echo [INFO] Install WSL first, then run install_nginx.sh from the Linux install-scripts folder
+    echo [INFO] Install WSL first, then run nginx.sh from the Linux install folder
     echo.
     echo Install WSL: wsl --install
 ) else if "%choice%"=="3" (

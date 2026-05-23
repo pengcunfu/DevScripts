@@ -37,9 +37,9 @@ DevScripts/
 │   ├── mirror_config.sh      # 镜像源配置
 │   └── open_port.sh          # 开放防火墙端口
 └── Windows/                  # Windows 脚本
-    ├── 安装脚本/             # 环境安装（.bat）
-    │   ├── install_docker.bat
-    │   ├── install_git.bat
+    ├── install/              # 环境安装（.bat）
+    │   ├── docker.bat
+    │   ├── git.bat
     │   └── ...
     ├── 部署脚本/             # 远程部署（.py）
     ├── npm_mirror_config.bat # npm 镜像配置
@@ -98,6 +98,7 @@ sudo ./Linux/安装脚本/install_docker.sh
 | **Redis** | ✅ | ✅ | Redis 缓存服务 |
 | **Nginx** | ✅ | ✅ | Nginx Web 服务器 |
 | **ROS2** | ✅ | ✅ | ROS 2 机器人系统 |
+| **MongoDB** | ✅ | — | MongoDB 便携版安装 |
 
 ### 🛠️ Windows 工具
 
@@ -138,9 +139,9 @@ sudo ./Linux/安装脚本/install_docker.sh
 ### 安装 Docker（Windows）
 
 ```batch
-# 以管理员身份运行
-cd Windows\安装脚本
-install_docker.bat
+# 以管理员身份运行（部分脚本）
+cd install
+docker.bat
 ```
 
 ### 安装 Docker（Linux）

@@ -43,7 +43,7 @@ if "%choice%"=="1" (
     start https://www.memurai.com/get-memurai
 ) else if "%choice%"=="2" (
     echo.
-    echo [INFO] Install WSL first, then run install_redis.sh from the Linux install-scripts folder
+    echo [INFO] Install WSL first, then run redis.sh from the Linux install folder
     echo.
     echo Install WSL: wsl --install
 ) else if "%choice%"=="3" (

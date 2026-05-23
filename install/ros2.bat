@@ -42,7 +42,7 @@ if "%choice%"=="1" (
     echo [Step 1] Install WSL 2
     echo Run: wsl --install
     echo.
-    echo [Step 2] After installing Ubuntu, run install_ros2.sh from the Linux install-scripts folder
+    echo [Step 2] After installing Ubuntu, run ros2.sh from the Linux install folder
     echo.
     echo [Step 3] Enable X11 forwarding (optional, for GUI)
     echo   Install VcXsrv or use WSLg
