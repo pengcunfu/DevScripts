@@ -20,7 +20,7 @@ chcp 65001 >nul
 title MongoDB Portable Installer
 
 rem ---------- User defaults (edit before running) ----------
-set "DEFAULT_INSTALL_ROOT=%USERPROFILE%\MongoDB"
+set "DEFAULT_INSTALL_ROOT=D:\Env\MongoDB"
 set "MONGODB_VERSION=8.0"
 set "MONGODB_ZIP_BUILD=8.0.23"
 set "MONGOSH_ZIP_BUILD=2.3.8"
@@ -87,11 +87,11 @@ if exist "!INSTALL_ROOT!\bin\mongod.exe" (
     echo.
     echo [INFO] MongoDB already exists at: !INSTALL_ROOT!
     mongod --version 2>nul
-    if errorlevel 1 "!INSTALL_ROOT!\bin\mongod.exe" --version 2>nul
+    if errorlevel 1 call "!INSTALL_ROOT!\bin\mongod.exe" --version 2>nul
     echo.
-    set /p overwrite=Re-download and reinstall? (Y/N):
+    set /p overwrite=Re-download and reinstall? [Y/N]:
     if /i not "!overwrite!"=="Y" (
-        if "%choice%"=="2" goto maybe_mongosh
+        if "!choice!"=="2" goto maybe_mongosh
         goto finish
     )
 )
