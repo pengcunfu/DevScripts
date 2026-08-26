@@ -126,16 +126,20 @@ sudo ./install/linux/install_docker.sh
 
 | 脚本 | 说明 |
 |------|------|
-| **jdk.cmd** | JDK 多版本切换 (8/11/17) |
-| **nodejs.bat** | Node.js 多版本切换 |
-| **php.bat** | PHP 多版本切换 |
-| **python.bat** | Python 多版本切换 |
+| **jdk-version-switcher.cmd** | JDK 版本切换 (符号链接方式，支持 8/11/17) |
+| **php-7.4.bat** | 切换到 PHP 7.4 |
+| **php-8.0.bat** | 切换到 PHP 8.0 |
+| **php-8.1.bat** | 切换到 PHP 8.1 |
+| **php-8.2.bat** | 切换到 PHP 8.2 |
+| **php-8.3.bat** | 切换到 PHP 8.3 |
 
 ### 🛠️ 系统工具 (`system-tools/`)
 
 | 脚本 | 平台 | 说明 |
 |------|------|------|
-| **open_port.sh** | Linux | 一键开放防火墙端口 |
+| **open_port_firewalld.sh** | Linux | 一键开放端口 (firewalld) |
+| **open_port_ufw.sh** | Linux | 一键开放端口 (ufw) |
+| **open_port_iptables.sh** | Linux | 一键开放端口 (iptables) |
 | **fix_cmd.bat** | Windows | CMD 快速修复 (AutoRun) |
 | **fix_cmd.ps1** | Windows | CMD 深度修复 (注册表/PATH/SFC) |
 | **fix_office_preview.bat** | Windows | Office 文件预览修复 |
@@ -206,10 +210,8 @@ sudo ./mirror/linux.sh
 ### 切换 JDK 版本
 
 ```batch
-.\version-switcher\jdk.cmd
-# 选择 1 - 切换到 JDK 8
-# 选择 2 - 切换到 JDK 11
-# 选择 3 - 切换到 JDK 17
+# 编辑脚本顶部的路径变量，然后双击运行
+.\version-switcher\jdk-version-switcher.cmd
 ```
 
 ---
