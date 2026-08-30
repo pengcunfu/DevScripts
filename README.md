@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Scripts](https://img.shields.io/badge/scripts-60%2B-orange)
 
-**跨平台开发脚本工具集合 — 按功能分类**
+**跨平台开发脚本工具集合 — 按程序分类**
 
 [功能特色](#-功能特色) • [快速开始](#-快速开始) • [脚本列表](#-脚本列表) • [使用示例](#-使用示例) • [贡献指南](#-贡献指南)
 
@@ -29,18 +29,26 @@
 
 ```
 DevScripts/
-├── install-linux/              # Linux 安装脚本 (.sh)
-├── install-windows/            # Windows 安装脚本 (.bat)
-├── mirrorconfig-linux/         # Linux 镜像源配置 (.sh)
-├── mirrorconfig-windows/       # Windows 镜像源配置 (.bat)
-├── systemtools-linux/          # Linux 系统工具 (.sh)
-├── systemtools-windows/        # Windows 系统工具 (.bat / .ps1)
-├── version-switcher/           # 多版本切换工具 (.cmd)
-├── git/                        # Git 配置工具 (.bat)
+├── git/            # Git 工具与安装
+├── go/             # Go 语言脚本
+├── java/           # Java 相关脚本
+├── node/           # Node.js 相关脚本
+├── php/            # PHP 相关脚本
+├── python/         # Python 相关脚本
+├── docker/         # Docker 相关脚本
+├── mariadb/        # MariaDB 脚本
+├── mysql/          # MySQL 脚本
+├── mongodb/        # MongoDB 脚本
+├── nginx/          # Nginx 脚本
+├── postgresql/     # PostgreSQL 脚本
+├── redis/          # Redis 脚本
+├── ros2/           # ROS 2 脚本
+├── mirrorconfig/   # 系统镜像源配置 (apt / yum / dnf / pacman)
+├── systemtools/    # 系统工具 (端口开放 / 右键菜单 / 系统修复)
 └── README.md
 ```
 
-> 目录命名规则:`<功能>-<平台>/`,平台无关时省略后缀。
+> 每个目录对应一个程序 / 语言，脚本直接放在目录下（最多两级）。Windows (`.bat` / `.cmd`) 与 Linux (`.sh`) 脚本统一按程序归入同一目录，不再按平台拆分。
 
 ---
 
@@ -65,100 +73,153 @@ git clone https://github.com/yourusername/DevScripts.git
 cd DevScripts
 
 # 添加执行权限
-chmod +x install-linux/*.sh mirrorconfig-linux/*.sh systemtools-linux/*.sh
+chmod +x */*.sh
 
 # 运行脚本
-sudo ./install-linux/install_docker.sh
+sudo ./docker/install_docker.sh
 ```
 
 ---
 
 ## 📋 脚本列表
 
-### 🔧 Linux 安装脚本 (`install-linux/`)
+### 🔵 Git (`git/`)
 
 | 脚本 | 说明 |
 |------|------|
-| `install_docker.sh` | Docker 安装 |
-| `install_docker_compose.sh` | Docker Compose 安装 |
-| `install_git.sh` | Git 安装 |
-| `install_go.sh` | Go 语言环境安装 |
-| `install_java.sh` | JDK / OpenJDK 安装 |
-| `install_mariadb.sh` | MariaDB 安装 |
-| `install_mysql.sh` | MySQL 安装 |
-| `install_nginx.sh` | Nginx 安装 |
-| `install_nodejs.sh` | Node.js 安装 |
-| `install_php.sh` | PHP 安装 |
-| `install_postgresql.sh` | PostgreSQL 安装 |
-| `install_pyenv.sh` | pyenv + Python 安装 |
-| `install_redis.sh` | Redis 安装 |
-| `install_ros2.sh` | ROS 2 机器人系统安装 |
+| `git.bat` | Git Windows 安装 |
+| `install_git.sh` | Git Linux 安装 |
+| `git-config-user.bat` | 快速配置 Git 用户名 / 邮箱 |
+| `git-config-proxy-karing.bat` | 设置 Git 代理 (Karing) |
+| `git-config-proxy-viewtrubo.bat` | 设置 Git 代理 (Viewtrubo) |
 
-### 🪟 Windows 安装脚本 (`install-windows/`)
+### 🔵 Go (`go/`)
 
 | 脚本 | 说明 |
 |------|------|
-| `docker.bat` | Docker Desktop 安装 |
-| `docker_compose.bat` | Docker Compose 安装 |
-| `git.bat` | Git 安装 |
-| `go.bat` | Go 语言环境安装 |
-| `hyper-v.bat` | 启用 Hyper-V 虚拟化 |
-| `java.bat` | JDK 安装 |
-| `mariadb.bat` | MariaDB 安装 |
-| `mongodb.bat` | MongoDB 便携版安装 |
-| `mysql.bat` | MySQL 安装 |
-| `nginx.bat` | Nginx 安装 |
-| `nodejs.bat` | Node.js 安装 |
+| `go-installer.bat` | Go 语言环境 Windows 安装 |
+| `install_go.sh` | Go 语言环境 Linux 安装 |
+| `go-config-mirror.bat` | Go 模块代理 (GOPROXY) 配置 |
+| `go-config-data-dir.bat` | 配置 GOPATH / GOMODCACHE / GOCACHE 数据目录 |
+
+### ☕ Java (`java/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `java.bat` | JDK Windows 安装 |
+| `install_java.sh` | JDK / OpenJDK Linux 安装 |
+| `jdk-version-switcher.cmd` | JDK 版本切换 (符号链接方式) |
+| `maven-config-mirror.bat` | Maven 仓库镜像配置 |
+
+### 🟢 Node.js (`node/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `nodejs.bat` | Node.js Windows 安装 |
+| `install_nodejs.sh` | Node.js Linux 安装 |
 | `nvm.bat` | NVM (Node 版本管理器) 安装 |
-| `php.bat` | PHP 安装 |
-| `postgresql.bat` | PostgreSQL 安装 |
-| `pyenv.bat` | pyenv + Python 安装 |
-| `redis.bat` | Redis 安装 |
-| `ros2.bat` | ROS 2 机器人系统安装 |
+| `nodejs-version-switcher.cmd` | Node.js 版本切换 |
+| `npm-config-mirror.bat` | npm 镜像源切换 (Windows) |
+| `npm-mirror.sh` | npm 镜像源切换 (Linux) |
 
-### 🪞 Linux 镜像源配置 (`mirrorconfig-linux/`)
+### 🐘 PHP (`php/`)
 
 | 脚本 | 说明 |
 |------|------|
-| `linux.sh` | 综合镜像源配置 (apt / yum / dnf / pacman / pip / npm / docker) |
+| `php.bat` | PHP Windows 安装 |
+| `install_php.sh` | PHP Linux 安装 |
+| `php-version-switcher.cmd` | PHP 版本切换 |
+
+### 🐍 Python (`python/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `pyenv.bat` | pyenv Windows 安装 |
+| `install_pyenv.sh` | pyenv + Python Linux 安装 |
+| `python-version-switcher.cmd` | Python 版本切换 |
+| `pip-config-mirror.bat` | pip 镜像源切换 (Windows) |
+| `pip-mirror.sh` | pip 镜像源切换 (Linux) |
+
+### 🐳 Docker (`docker/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `docker.bat` | Docker Desktop Windows 安装 |
+| `install_docker.sh` | Docker Linux 安装 |
+| `docker_compose.bat` | Docker Compose Windows 安装 |
+| `install_docker_compose.sh` | Docker Compose Linux 安装 |
+| `docker-mirror.sh` | Docker 镜像加速器配置 |
+
+### 🗄️ 数据库
+
+#### MariaDB (`mariadb/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `mariadb.bat` | MariaDB Windows 安装 |
+| `install_mariadb.sh` | MariaDB Linux 安装 |
+
+#### MySQL (`mysql/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `mysql.bat` | MySQL Windows 安装 |
+| `install_mysql.sh` | MySQL Linux 安装 |
+
+#### MongoDB (`mongodb/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `mongodb.bat` | MongoDB 便携版安装 |
+
+#### PostgreSQL (`postgresql/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `postgresql.bat` | PostgreSQL Windows 安装 |
+| `install_postgresql.sh` | PostgreSQL Linux 安装 |
+
+#### Redis (`redis/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `redis.bat` | Redis Windows 安装 |
+| `install_redis.sh` | Redis Linux 安装 |
+
+### 🌐 服务
+
+#### Nginx (`nginx/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `nginx.bat` | Nginx Windows 安装 |
+| `install_nginx.sh` | Nginx Linux 安装 |
+
+#### ROS 2 (`ros2/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `ros2.bat` | ROS 2 Windows 安装 |
+| `install_ros2.sh` | ROS 2 机器人系统 Linux 安装 |
+
+### 🪞 系统镜像源配置 (`mirrorconfig/`)
+
+| 脚本 | 说明 |
+|------|------|
+| `linux.sh` | 综合镜像源配置 (apt / yum / dnf / pacman) |
 | `apt-mirror.sh` | apt 镜像源切换 (Debian / Ubuntu) |
 | `yum-mirror.sh` | yum / dnf 镜像源切换 (CentOS / RHEL / Rocky) |
 | `pacman-mirror.sh` | pacman 镜像源切换 (Arch) |
-| `pip-mirror.sh` | pip 镜像源切换 |
-| `npm-mirror.sh` | npm 镜像源切换 |
-| `docker-mirror.sh` | Docker 镜像加速器配置 |
 | `common.sh` | 镜像源配置公共函数库 |
 
-### 🪟 Windows 镜像源配置 (`mirrorconfig-windows/`)
-
-| 脚本 | 说明 |
-|------|------|
-| `npm-config-mirror.bat` | npm 镜像源切换 |
-| `pip-config-mirror.bat` | pip 镜像源切换 |
-| `maven-config-mirror.bat` | Maven 仓库镜像配置 |
-| `go-config-mirror.bat` | Go 模块代理配置 |
-
-### 🔄 版本切换工具 (`version-switcher/`)
-
-| 脚本 | 说明 |
-|------|------|
-| `jdk-version-switcher.cmd` | JDK 版本切换 (符号链接方式) |
-| `nodejs-version-switcher.cmd` | Node.js 版本切换 |
-| `python-version-switcher.cmd` | Python 版本切换 |
-| `php-version-switcher.cmd` | PHP 版本切换 |
-
-### 🛠️ Linux 系统工具 (`systemtools-linux/`)
+### 🛠️ 系统工具 (`systemtools/`)
 
 | 脚本 | 说明 |
 |------|------|
 | `open_port_firewalld.sh` | 一键开放端口 (firewalld) |
 | `open_port_ufw.sh` | 一键开放端口 (ufw) |
 | `open_port_iptables.sh` | 一键开放端口 (iptables) |
-
-### 🛠️ Windows 系统工具 (`systemtools-windows/`)
-
-| 脚本 | 说明 |
-|------|------|
+| `hyper-v.bat` | 启用 Hyper-V 虚拟化 |
 | `context_menu_manager.bat` | 右键菜单管理 (CMD / VSCode / Notepad++ / 经典菜单) |
 | `win11_default_menu.bat` | 恢复 Win11 默认右键菜单样式 |
 | `win10_classic_menu.bat` | 切换为 Win10 经典右键菜单 |
@@ -168,14 +229,6 @@ sudo ./install-linux/install_docker.sh
 | `refresh-icon-cache.bat` | 刷新系统图标缓存 |
 | `wechat_multi_instance.bat` | 微信多开 |
 
-### 🔀 Git 工具 (`git/`)
-
-| 脚本 | 说明 |
-|------|------|
-| `git-config-user.bat` | 快速配置 Git 用户名 / 邮箱 |
-| `git-config-proxy-karing.bat` | 设置 Git 代理 (Karing) |
-| `git-config-proxy-viewtrubo.bat` | 设置 Git 代理 (Viewtrubo) |
-
 ---
 
 ## 💡 使用示例
@@ -184,43 +237,43 @@ sudo ./install-linux/install_docker.sh
 
 ```bash
 # Linux
-sudo ./install-linux/install_docker.sh
+sudo ./docker/install_docker.sh
 
 # Windows (管理员)
-.\install-windows\docker.bat
+.\docker\docker.bat
 ```
 
 ### 切换镜像源
 
 ```bash
-# Linux 一键切换全部镜像
-sudo ./mirrorconfig-linux/linux.sh
+# Linux 一键切换系统镜像 (apt / yum / dnf / pacman)
+sudo ./mirrorconfig/linux.sh
 
 # Linux 仅切换 apt 镜像
-sudo ./mirrorconfig-linux/apt-mirror.sh
+sudo ./mirrorconfig/apt-mirror.sh
 
-# Windows
-.\mirrorconfig-windows\npm-config-mirror.bat
+# Windows npm 镜像
+.\node\npm-config-mirror.bat
 ```
 
 ### 切换 JDK 版本
 
 ```batch
 # 编辑脚本顶部的路径变量，然后双击运行
-.\version-switcher\jdk-version-switcher.cmd
+.\java\jdk-version-switcher.cmd
 ```
 
 ### 在 Linux 上开放端口
 
 ```bash
 # firewalld
-sudo ./systemtools-linux/open_port_firewalld.sh
+sudo ./systemtools/open_port_firewalld.sh
 
 # ufw
-sudo ./systemtools-linux/open_port_ufw.sh
+sudo ./systemtools/open_port_ufw.sh
 
 # iptables
-sudo ./systemtools-linux/open_port_iptables.sh
+sudo ./systemtools/open_port_iptables.sh
 ```
 
 ---
