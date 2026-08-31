@@ -215,10 +215,10 @@ sudo ./docker/docker-install.sh
 | `context_menu_manager.bat` | 右键菜单管理 (CMD / VSCode / Notepad++ / 经典菜单) |
 | `win11_default_menu.bat` | 恢复 Win11 默认右键菜单样式 |
 | `win10_classic_menu.bat` | 切换为 Win10 经典右键菜单 |
-| `fix_cmd.bat` | CMD 快速修复 (AutoRun) |
-| `fix_cmd.ps1` | CMD 深度修复 (注册表 / PATH / SFC) |
+| `fix_cmd.bat` | CMD 快速修复 (AutoRun / 注册表 / PATH / SFC) |
 | `fix_office_preview.bat` | Office 文件预览修复 |
 | `refresh-icon-cache.bat` | 刷新系统图标缓存 |
+| `clean_invalid_openwith.bat` | 批量清理失效的"打开方式"关联 / UserChoice 锁定关联 |
 | `wechat_multi_instance.bat` | 微信多开 |
 
 ---
