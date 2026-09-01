@@ -131,6 +131,7 @@ sudo ./docker/docker-install.sh
 
 | 脚本 | 说明 |
 |------|------|
+| `python-install.bat` | Python Windows 静默安装 (exe, 无需管理员, 多镜像/多版本) |
 | `pyenv-install.bat` | pyenv Windows 安装 |
 | `pyenv-install.sh` | pyenv + Python Linux 安装 |
 | `python-version-switcher.cmd` | Python 版本切换 |
