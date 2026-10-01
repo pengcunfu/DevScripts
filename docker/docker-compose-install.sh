@@ -62,7 +62,7 @@ detect_architecture() {
 check_docker() {
     if ! command -v docker &> /dev/null; then
         warn "Docker 未安装，请先安装 Docker"
-        info "运行: ./一键安装Docker.sh"
+        info "运行: ./docker-install.sh"
         exit 1
     fi
     info "Docker 已安装: $(docker --version)"
@@ -97,14 +97,38 @@ uninstall_old_compose() {
 install_compose_standalone() {
     info "开始安装 Docker Compose standalone..."
 
+    # 优先复用 docker-ce 自带的 compose 插件二进制做软链：
+    # 无需联网，版本与插件一致，避开国内直连 github.com / api.github.com 被重置的问题
+    for plugin_path in \
+        /usr/libexec/docker/cli-plugins/docker-compose \
+        /usr/lib/docker/cli-plugins/docker-compose \
+        /usr/local/lib/docker/cli-plugins/docker-compose
+    do
+        if [ -x "$plugin_path" ]; then
+            info "复用已安装的 Compose 插件: $plugin_path"
+            ln -sf "$plugin_path" /usr/local/bin/docker-compose
+            ln -sf "$plugin_path" /usr/bin/docker-compose
+            info "Docker Compose standalone 安装完成（软链自插件，无需联网下载）"
+            return 0
+        fi
+    done
+
+    # 未找到插件时，回退到从 GitHub 下载独立二进制
+    warn "未找到 Compose 插件，回退为从 GitHub 下载独立版本..."
     get_latest_version
     detect_architecture
 
     # 下载 URL
     DOWNLOAD_URL="https://github.com/docker/compose/releases/download/${LATEST_VERSION}/docker-compose-linux-${COMPOSE_ARCH}"
 
-    info "下载 Docker Compose..."
-    curl -SL "$DOWNLOAD_URL" -o /usr/local/bin/docker-compose
+    info "下载 Docker Compose: $DOWNLOAD_URL"
+    if ! curl -fSL --connect-timeout 15 --retry 2 "$DOWNLOAD_URL" -o /usr/local/bin/docker-compose; then
+        rm -f /usr/local/bin/docker-compose
+        error "下载失败: $DOWNLOAD_URL"
+        error "国内网络可尝试 GitHub 加速前缀，例如："
+        error "  curl -fSL https://ghfast.top/$DOWNLOAD_URL -o /usr/local/bin/docker-compose"
+        exit 1
+    fi
 
     # 设置执行权限
     chmod +x /usr/local/bin/docker-compose
@@ -115,44 +139,17 @@ install_compose_standalone() {
     info "Docker Compose standalone 安装完成"
 }
 
-# 安装 Docker Compose 通过 pip（备用方法）
-install_compose_pip() {
-    info "通过 pip 安装 Docker Compose..."
-
-    # 检查 Python 和 pip
-    if ! command -v python3 &> /dev/null; then
-        error "未找到 Python3"
-        exit 1
-    fi
-
-    if ! command -v pip3 &> /dev/null; then
-        info "安装 pip3..."
-        apt-get install -y python3-pip || yum install -y python3-pip
-    fi
-
-    # 安装/升级 docker-compose
-    pip3 install --upgrade docker-compose
-
-    info "Docker Compose 通过 pip 安装完成"
-}
-
-# 启用 Docker Compose 插件（如果使用 Docker Desktop 或新版本 Docker）
-enable_compose_plugin() {
-    if docker compose version &> /dev/null; then
-        info "Docker Compose 插件已可用"
-        docker compose version
-    fi
-}
-
 # 验证安装
 verify_installation() {
     info "验证 Docker Compose 安装..."
 
     # 检查 standalone 版本
     if [ -f /usr/local/bin/docker-compose ]; then
-        docker-compose --version
-        if [ $? -eq 0 ]; then
+        # set -e 下 docker-compose 失败会直接退出，需放进 if 条件里才能走到提示
+        if docker-compose --version; then
             info "Docker Compose standalone 安装成功！"
+        else
+            warn "docker-compose 命令存在但执行失败，请检查二进制是否完整"
         fi
     fi
 
@@ -200,40 +197,6 @@ EXAMPLE
     echo ""
 }
 
-# 交互式选择安装方式
-select_installation_method() {
-    echo ""
-    echo "请选择 Docker Compose 安装方式:"
-    echo "  1) Standalone (独立版本，使用 docker-compose 命令)"
-    echo "  2) Docker 插件 (已包含在 Docker 中，使用 docker compose 命令)"
-    echo "  3) 两者都安装"
-    echo "  4) 通过 pip 安装 (备用方法)"
-    echo ""
-    read -p "请输入选项 [1-4] (默认: 3): " choice
-    choice=${choice:-3}
-
-    case $choice in
-        1)
-            install_compose_standalone
-            ;;
-        2)
-            info "使用 Docker Compose 插件"
-            enable_compose_plugin
-            ;;
-        3)
-            install_compose_standalone
-            enable_compose_plugin
-            ;;
-        4)
-            install_compose_pip
-            ;;
-        *)
-            error "无效选项"
-            exit 1
-            ;;
-    esac
-}
-
 # 检测系统类型
 detect_os() {
     if [ -f /etc/os-release ]; then
@@ -259,7 +222,7 @@ main() {
     detect_os
     check_docker
     uninstall_old_compose
-    select_installation_method
+    install_compose_standalone
     verify_installation
     show_usage
 }
