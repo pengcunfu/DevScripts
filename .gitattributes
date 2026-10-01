@@ -1,0 +1,9 @@
+# Shell 脚本强制 LF，避免 Windows 下 CRLF 导致 Linux 执行报 $'\r': 未找到命令
+*.sh text eol=lf
+
+# Windows 批处理保持 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# PowerShell 保持 CRLF
+*.ps1 text eol=crlf
