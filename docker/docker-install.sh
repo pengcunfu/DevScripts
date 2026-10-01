@@ -78,22 +78,47 @@ install_docker_debian() {
 
     # 配置阿里云 APT 镜像源
     info "配置阿里云 APT 镜像源..."
+    # 优先取 os-release 的 VERSION_CODENAME，避免依赖此时尚未安装的 lsb-release
+    CODENAME="${VERSION_CODENAME:-$(lsb_release -cs 2>/dev/null || true)}"
+    if [ -z "$CODENAME" ]; then
+        error "无法确定系统代号 (codename)，请先安装 lsb-release 后重试"
+        exit 1
+    fi
+
     if [ "$OS" = "ubuntu" ]; then
         # Ubuntu 阿里云源
         cat > /etc/apt/sources.list <<EOF
 # 阿里云 Ubuntu 镜像源
-deb https://mirrors.aliyun.com/ubuntu/ $(lsb_release -cs) main restricted universe multiverse
-deb https://mirrors.aliyun.com/ubuntu/ $(lsb_release -cs)-updates main restricted universe multiverse
-deb https://mirrors.aliyun.com/ubuntu/ $(lsb_release -cs)-security main restricted universe multiverse
-deb https://mirrors.aliyun.com/ubuntu/ $(lsb_release -cs)-backports main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ $CODENAME main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ $CODENAME-updates main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ $CODENAME-security main restricted universe multiverse
+deb https://mirrors.aliyun.com/ubuntu/ $CODENAME-backports main restricted universe multiverse
 EOF
     elif [ "$OS" = "debian" ]; then
-        # Debian 阿里云源
+        # Debian 12 (bookworm) 起安全源套件名由 <codename>/updates 改为 <codename>-security，
+        # 并新增 non-free-firmware 组件；按大版本号区分，兼容 Debian 11 及更早
+        DEB_MAJOR="${OS_VERSION%%.*}"
+        case "$DEB_MAJOR" in
+            ''|*[!0-9]*) DEB_MAJOR=12 ;;   # 取不到版本号时按新格式兜底
+        esac
+        if [ "$DEB_MAJOR" -ge 12 ]; then
+            DEB_COMPONENTS="main contrib non-free non-free-firmware"
+            DEB_SECURITY_SUITE="${CODENAME}-security"
+        else
+            DEB_COMPONENTS="main contrib non-free"
+            DEB_SECURITY_SUITE="${CODENAME}/updates"
+        fi
+
+        # Debian 12 起官方默认启用 deb822 格式源，需先移除避免与 sources.list 重复
+        if [ -f /etc/apt/sources.list.d/debian.sources ]; then
+            mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak
+        fi
+
         cat > /etc/apt/sources.list <<EOF
 # 阿里云 Debian 镜像源
-deb https://mirrors.aliyun.com/debian/ $(lsb_release -cs) main contrib non-free non-free-firmware
-deb https://mirrors.aliyun.com/debian/ $(lsb_release -cs)-updates main contrib non-free non-free-firmware
-deb https://mirrors.aliyun.com/debian-security $(lsb_release -cs)/updates main contrib non-free non-free-firmware
+deb https://mirrors.aliyun.com/debian/ $CODENAME $DEB_COMPONENTS
+deb https://mirrors.aliyun.com/debian/ $CODENAME-updates $DEB_COMPONENTS
+deb https://mirrors.aliyun.com/debian-security $DEB_SECURITY_SUITE $DEB_COMPONENTS
 EOF
     fi
 
@@ -108,15 +133,32 @@ EOF
         gnupg \
         lsb-release
 
-    # 添加 Docker 官方 GPG 密钥
+    # Docker 仓库地址：官方源 download.docker.com 在国内常被重置连接，默认走阿里云镜像
+    # 可用环境变量覆盖，例如：
+    #   sudo DOCKER_MIRROR=https://mirrors.tuna.tsinghua.edu.cn/docker-ce ./docker-install.sh
+    DOCKER_MIRROR="${DOCKER_MIRROR:-https://mirrors.aliyun.com/docker-ce}"
+
+    # 添加 Docker 仓库 GPG 密钥（先落盘再 dearmor，避免 curl 失败时 gpg 读到空输入）
     install -m 0755 -d /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/$OS/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    info "下载 Docker GPG 密钥: $DOCKER_MIRROR/linux/$OS/gpg"
+    KEY_TMP=$(mktemp)
+    if ! curl -fsSL --connect-timeout 15 --retry 2 -o "$KEY_TMP" "$DOCKER_MIRROR/linux/$OS/gpg"; then
+        rm -f "$KEY_TMP"
+        error "Docker GPG 密钥下载失败: $DOCKER_MIRROR/linux/$OS/gpg"
+        error "可换用其他镜像后重试，例如："
+        error "  sudo DOCKER_MIRROR=https://mirrors.tuna.tsinghua.edu.cn/docker-ce $0"
+        exit 1
+    fi
+    # 已存在的密钥文件会让 gpg 交互式询问「是否覆盖」，--batch --yes 保证非交互执行
+    rm -f /etc/apt/keyrings/docker.gpg
+    gpg --batch --yes --dearmor -o /etc/apt/keyrings/docker.gpg < "$KEY_TMP"
+    rm -f "$KEY_TMP"
     chmod a+r /etc/apt/keyrings/docker.gpg
 
-    # 设置 Docker 仓库（使用官方源，但通过国内源下载依赖）
+    # 设置 Docker 仓库
     echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$OS \
-      $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] $DOCKER_MIRROR/linux/$OS \
+      $CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
 
     # 再次更新包索引
     apt-get update
@@ -253,15 +295,14 @@ verify_installation() {
     docker --version
     docker compose version
 
-    # 运行测试容器
+    # 运行测试容器（依赖外网拉取镜像，失败只警告，不影响已完成的安装）
     info "运行测试容器..."
-    docker run --rm hello-world
-
-    if [ $? -eq 0 ]; then
+    if docker run --rm hello-world; then
         info "Docker 安装验证成功！"
     else
-        error "Docker 安装验证失败"
-        exit 1
+        warn "测试容器运行失败：Docker 本体已安装成功，仅镜像拉取不通"
+        warn "多为国内网络无法访问 Docker Hub，请检查 /etc/docker/daemon.json 的 registry-mirrors"
+        warn "修复后可执行: docker pull hello-world"
     fi
 }
 
