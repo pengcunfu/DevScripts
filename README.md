@@ -90,6 +90,8 @@ sudo ./docker/docker-install.sh
 | `git-config-user.bat` | 快速配置 Git 用户名 / 邮箱 |
 | `git-config-proxy-karing.bat` | 设置 Git 代理 (Karing) |
 | `git-config-proxy-viewtrubo.bat` | 设置 Git 代理 (Viewtrubo) |
+| `git-config-proxy-clashverge.bat` | 设置 Git 代理 (ClashVerge) |
+| `gitconfig-proxy-unset.bat` | 清除 Git 代理，恢复直连 |
 
 ### 🔵 Go (`go/`)
 
