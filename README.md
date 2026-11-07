@@ -222,6 +222,8 @@ sudo ./docker/docker-install.sh
 | `fix_office_preview.bat` | Office 文件预览修复 |
 | `refresh-icon-cache.bat` | 刷新系统图标缓存 |
 | `clean_invalid_openwith.bat` | 批量清理失效的"打开方式"关联 / UserChoice 锁定关联 |
+| `disable_windows_update.bat` | 永久禁用 Windows 更新（服务 / 策略 / 计划任务） |
+| `enable_windows_update.bat` | 恢复 Windows 更新默认配置 |
 | `wechat_multi_instance.bat` | 微信多开 |
 
 ---
