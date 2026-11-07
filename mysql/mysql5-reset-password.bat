@@ -3,7 +3,7 @@ setlocal EnableExtensions
 rem ============================================================================
 rem MySQL 5 Password Reset (forgot the root password)
 rem ----------------------------------------------------------------------------
-rem Resets 'root'@'localhost' without knowing the old password, using the
+rem Resets the configured root account without knowing the old password, using the
 rem official --init-file method:
 rem   1. Stop the MySQL service
 rem   2. Start mysqld once with a temporary init file containing SET PASSWORD
@@ -14,8 +14,8 @@ rem Requirements:
 rem   - MySQL 5.x installed as a Windows service. A manual (zip) install also
 rem     works: the script asks for mysqld.exe and my.ini.
 rem   - Administrator privileges (the script self-elevates).
-rem   - The root account host is localhost by default. Change ROOT_HOST below
-rem     if your account is 'root'@'127.0.0.1' or 'root'@'%'.
+rem   - The root account user and host default to root and localhost. Change
+rem     ROOT_USER and ROOT_HOST in the configuration block below.
 rem
 rem The new password may contain any printable ASCII character. Quote and
 rem backslash characters are escaped automatically.
@@ -25,7 +25,34 @@ rem ============================================================================
 chcp 65001 >nul
 title MySQL 5 Password Reset
 
+rem ============================================================================
+rem User configuration: edit these values for your environment.
+rem For a Windows service set SERVICE; for a manual (zip) install set MYSQLD.
+rem Empty service, path and port values are detected automatically.
+rem ============================================================================
+rem MySQL root account name (example: root)
+set "ROOT_USER=root"
+
+rem Root account host (example: localhost; use 127.0.0.1 for a TCP-only account)
 set "ROOT_HOST=localhost"
+
+rem Windows service name (example: MySQL57). Set it to force service mode.
+set "SERVICE="
+
+rem Full path to mysqld.exe (example: C:\Program Files\MySQL\MySQL Server 5.7\bin\mysqld.exe).
+rem Set it to force manual mode; leave empty to detect it from the service.
+set "MYSQLD="
+
+rem Full path to my.ini (example: C:\ProgramData\MySQL\MySQL Server 5.7\my.ini).
+rem Leave empty to detect it automatically.
+set "MYINI="
+
+rem TCP port for the temporary client (example: 3306). Leave empty to read my.ini.
+set "MYSQL_PORT="
+
+rem Strip optional quotes around the paths configured above.
+set "MYSQLD=%MYSQLD:"=%"
+set "MYINI=%MYINI:"=%"
 
 :: --- self-elevate -----------------------------------------------------------
 net session >nul 2>&1
@@ -39,15 +66,12 @@ echo ============================================================
 echo   MySQL 5 Password Reset
 echo ============================================================
 echo.
-echo This resets the password of 'root'@'%ROOT_HOST%' without the old one.
+echo This resets the password of '%ROOT_USER%'@'%ROOT_HOST%' without the old one.
 echo Close any other MySQL instance before continuing.
 echo.
 pause
 echo.
 
-set "SERVICE="
-set "MYSQLD="
-set "MYINI="
 set "WAS_RUNNING=0"
 set "SERVICE_STOPPED=0"
 set "TEMP_STARTED=0"
@@ -62,6 +86,8 @@ if not exist "%TMPD%" (
 )
 
 :: --- locate the MySQL service ----------------------------------------------
+if defined SERVICE goto service_ready
+if defined MYSQLD goto paths_ready
 set "SVC_TMP=%TMPD%\services.txt"
 powershell -NoProfile -Command "Get-CimInstance Win32_Service | Where-Object { $_.PathName -match 'mysqld\.exe' } | ForEach-Object { $_.Name }" > "%SVC_TMP%" 2>nul
 set "SVCCOUNT=0"
@@ -100,12 +126,16 @@ if errorlevel 1 (
 set "MYSQL_SVC=%SERVICE%"
 for /f "usebackq delims=" %%A in (`powershell -NoProfile -Command "$s=Get-CimInstance Win32_Service | Where-Object { $_.Name -eq $env:MYSQL_SVC }; if($s){$m=[regex]::Match($s.PathName,'^\x22?(.*?mysqld\.exe)');$d=[regex]::Match($s.PathName,'--defaults-file=(?:\x22([^\x22]+)\x22|(\S+))');$ini=$d.Groups[1].Value;if(-not $ini){$ini=$d.Groups[2].Value};Write-Output ($m.Groups[1].Value + '|' + $ini)}"`) do (
     for /f "tokens=1,2 delims=|" %%B in ("%%A") do (
-        set "MYSQLD=%%B"
-        set "MYINI=%%C"
+        if not defined MYSQLD set "MYSQLD=%%B"
+        if not defined MYINI set "MYINI=%%C"
     )
 )
 
 :paths_ready
+if not exist "%MYSQLD%" (
+    echo [ERROR] mysqld.exe not found: %MYSQLD%
+    goto abort
+)
 for %%P in ("%MYSQLD%") do set "BINDIR=%%~dpP"
 set "MYSQL=%BINDIR%mysql.exe"
 set "MYSQLADMIN=%BINDIR%mysqladmin.exe"
@@ -115,6 +145,10 @@ if not exist "%MYSQL%" (
 )
 if not exist "%MYSQLADMIN%" (
     echo [ERROR] mysqladmin.exe not found next to mysqld.exe.
+    goto abort
+)
+if defined MYINI if not exist "%MYINI%" (
+    echo [ERROR] my.ini not found: %MYINI%
     goto abort
 )
 if exist "%MYINI%" goto myini_ready
@@ -145,14 +179,16 @@ if /i not "%OK%"=="Y" goto abort
 :version_checked
 
 :: --- port used by the temporary server --------------------------------------
+if defined MYSQL_PORT goto port_ready
 set "MYSQL_PORT=3306"
 for /f "usebackq delims=" %%P in (`powershell -NoProfile -Command "$m=Select-String -LiteralPath $env:MYINI -Pattern '^\s*port\s*=\s*(\d+)' -ErrorAction SilentlyContinue | Select-Object -First 1; if($m){$m.Matches[0].Groups[1].Value}"`) do set "MYSQL_PORT=%%P"
+:port_ready
 
 echo.
 echo Service : "%SERVICE%"
 echo mysqld  : "%MYSQLD%"
 echo my.ini  : "%MYINI%"
-echo Account : 'root'@'%ROOT_HOST%'
+echo Account : '%ROOT_USER%'@'%ROOT_HOST%'
 echo Port    : %MYSQL_PORT%
 
 :: --- ask for the new password ----------------------------------------------
@@ -161,7 +197,7 @@ set /a PWTRIES=0
 set /a PWTRIES+=1
 if %PWTRIES% gtr 4 goto abort
 echo.
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$s1=Read-Host -AsSecureString 'New password'; $s2=Read-Host -AsSecureString 'Confirm password'; $b1=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($s1); $b2=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($s2); $p1=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($b1); $p2=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($b2); [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b1); [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b2); if($p1 -cne $p2){exit 2}; if([string]::IsNullOrEmpty($p1)){exit 1}; if($p1 -match '[^\x20-\x7E]'){exit 3}; $q=[char]39; $bs=[string][char]92; $sq=$p1.Replace($bs,($bs+$bs)).Replace([string]$q,([string]$q+[string]$q)); $sql='SET PASSWORD FOR ' + $q + 'root' + $q + '@' + $q + $env:ROOT_HOST + $q + ' = PASSWORD(' + $q + $sq + $q + ');'; $ev=$p1.Replace($bs,($bs+$bs)).Replace([string][char]34,($bs+[string][char]34)); $cnf='[client]','user=root',('password=' + [char]34 + $ev + [char]34),'host=127.0.0.1',('port=' + $env:MYSQL_PORT); try { Set-Content -LiteralPath $env:MYSQL_INIT -Value $sql -Encoding ASCII -ErrorAction Stop; Set-Content -LiteralPath $env:MYSQL_CNF -Value $cnf -Encoding ASCII -ErrorAction Stop } catch { exit 4 }"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$s1=Read-Host -AsSecureString 'New password'; $s2=Read-Host -AsSecureString 'Confirm password'; $b1=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($s1); $b2=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($s2); $p1=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($b1); $p2=[Runtime.InteropServices.Marshal]::PtrToStringBSTR($b2); [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b1); [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($b2); if($p1 -cne $p2){exit 2}; if([string]::IsNullOrEmpty($p1)){exit 1}; if($p1 -match '[^\x20-\x7E]'){exit 3}; $q=[char]39; $bs=[string][char]92; $sq=$p1.Replace($bs,($bs+$bs)).Replace([string]$q,([string]$q+[string]$q)); $sql='SET PASSWORD FOR ' + $q + $env:ROOT_USER + $q + '@' + $q + $env:ROOT_HOST + $q + ' = PASSWORD(' + $q + $sq + $q + ');'; $ev=$p1.Replace($bs,($bs+$bs)).Replace([string][char]34,($bs+[string][char]34)); $cnf='[client]',('user=' + $env:ROOT_USER),('password=' + [char]34 + $ev + [char]34),'host=127.0.0.1',('port=' + $env:MYSQL_PORT); try { Set-Content -LiteralPath $env:MYSQL_INIT -Value $sql -Encoding ASCII -ErrorAction Stop; Set-Content -LiteralPath $env:MYSQL_CNF -Value $cnf -Encoding ASCII -ErrorAction Stop } catch { exit 4 }"
 if errorlevel 4 (
     echo [ERROR] Cannot write temporary files.
     goto abort
@@ -306,7 +342,7 @@ timeout /t 1 /nobreak >nul
 goto verify
 :verify_fail
 echo [WARN] The service is running but rejected the new password.
-echo        Check whether the account host is '%ROOT_HOST%'.
+echo        Check ROOT_USER and ROOT_HOST against mysql.user.
 goto fail
 :verify_ok
 type "%TMPD%\verify.out"
