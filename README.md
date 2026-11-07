@@ -165,6 +165,8 @@ sudo ./docker/docker-install.sh
 |------|------|
 | `mysql-install.bat` | MySQL Windows 安装 |
 | `mysql-install.sh` | MySQL Linux 安装 |
+| `mysql8-reset-password.bat` | 忘记 root 密码时重置 MySQL 8（--init-file 方式） |
+| `mysql5-reset-password.bat` | 忘记 root 密码时重置 MySQL 5（--init-file 方式） |
 
 #### MongoDB (`mongodb/`)
 
